@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using Google.Protobuf;
 
@@ -9,6 +10,8 @@ namespace Microsoft.Web.WebView2.Core
     /// <summary>
     /// ViewModelBase
     /// </summary>
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDual)]
     public class ViewModelBase
     {
         /// <summary>

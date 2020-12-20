@@ -5,13 +5,17 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Web.WebView2.Core; 
+using Microsoft.Web.WebView2.Core;
+using WebView2.Demo.DataModels;
 
 namespace WebView2.Demo
 {
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDual)]
     public partial class FrmMainWindow : Form
     {
         public FrmMainWindow()
@@ -20,10 +24,12 @@ namespace WebView2.Demo
             var webview = new Microsoft.Web.WebView2.WinForms.WebView2 () { Dock = DockStyle.Fill} ;
             this.Controls.Add(webview);
             this.Size = new Size(1600, 900);
-            InitializeWebview2Async(webview, null, null, null, () => 
+            this.InitializeWebview2Async(webview, null, null, null, () => 
                 webview.RegisterApiDomain()
-                    .RegisterDataModels(this.GetType().Assembly)
-                    .RegisterObjectToScript(nameof(FrmMainWindow), this));
+                .RegisterDataModels(this.GetType().Assembly)
+                .RegisterObjectToScript(nameof(BridgeModel), new BridgeModel())); 
+            
+            webview.Source = new Uri(Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "wwwroot","index.html"));
         }
 
         /// <summary>
@@ -41,9 +47,11 @@ namespace WebView2.Demo
             Func<Microsoft.Web.WebView2.WinForms.WebView2> func = null)
         {
             userDataFolder = userDataFolder ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"UserData");
-            var env = await CoreWebView2Environment.CreateAsync(browserExecutableFolder, userDataFolder, options);
+            var env = await CoreWebView2Environment.CreateAsync(browserExecutableFolder, userDataFolder, options).ConfigureAwait(false);
             await webview.EnsureCoreWebView2Async(env).ConfigureAwait(false);
-            func?.Invoke();
+            
+            if(func != null)
+                webview.Invoke(func);
         } 
     }
 }

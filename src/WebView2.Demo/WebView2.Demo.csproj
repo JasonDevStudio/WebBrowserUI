@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot" />
+      <Folder Include="wwwroot\css" />
     </ItemGroup>
 
     <ItemGroup>
@@ -19,6 +19,21 @@
 
     <ItemGroup>
       <ProjectReference Include="..\WebView2.Core\WebView2.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="wwwroot\js\index.js" />
+      <EmbeddedResource Include="wwwroot\js\index.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="wwwroot\js\jquery-3.5.1.min.js" />
+      <EmbeddedResource Include="wwwroot\js\jquery-3.5.1.min.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="wwwroot\index.html" />
+      <EmbeddedResource Include="wwwroot\index.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>
