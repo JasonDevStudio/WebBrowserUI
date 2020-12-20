@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Microsoft.Web.WebView2.Core
 {
@@ -35,7 +37,7 @@ namespace Microsoft.Web.WebView2.Core
         /// <param name="name">对象名称</param>
         /// <param name="obj">obj</param>
         /// <returns>WinForms.WebView2</returns>
-        public static WinForms.WebView2 RegisterObjectToScript(this WinForms.WebView2 webview, string name, object obj)
+        public static WinForms.WebView2 RegisterObjectToScript(this Microsoft.Web.WebView2.WinForms.WebView2 webview, string name, object obj)
         {
             webview.CoreWebView2.AddHostObjectToScript(name, obj);
             return webview;
@@ -47,7 +49,7 @@ namespace Microsoft.Web.WebView2.Core
         /// <param name="webview">WinForms.WebView2</param>
         /// <param name="domain">需要拦截的域名 默认 http://api.app.local </param>
         /// <returns>WinForms.WebView2</returns>
-        public static WinForms.WebView2 RegisterApiDomain(this WinForms.WebView2 webview,
+        public static WinForms.WebView2 RegisterApiDomain(this Microsoft.Web.WebView2.WinForms.WebView2 webview,
             string domain = "http://api.app.local")
         {
             ApiDomain = domain;
@@ -100,7 +102,7 @@ namespace Microsoft.Web.WebView2.Core
         /// <param name="webview">WinForms.WebView2</param>
         /// <param name="assembly">Assembly</param>
         /// <returns>WinForms.WebView2</returns>
-        public static WinForms.WebView2 RegisterDataModels(this WinForms.WebView2 webview, Assembly assembly)
+        public static WinForms.WebView2 RegisterDataModels(this Microsoft.Web.WebView2.WinForms.WebView2 webview, Assembly assembly)
         {
             Routes.AddRange(new DataModelProvider().ImportDataModelAssembly(assembly));
             return webview;
@@ -112,7 +114,7 @@ namespace Microsoft.Web.WebView2.Core
         /// <param name="webview">WinForms.WebView2</param>
         /// <param name="handler">handler</param>
         /// <returns>WinForms.WebView2</returns>
-        public static WinForms.WebView2 RegisterRequestHandler(this WinForms.WebView2 webview,
+        public static WinForms.WebView2 RegisterRequestHandler(this Microsoft.Web.WebView2.WinForms.WebView2 webview,
             Action<CoreWebView2WebResourceRequestedEventArgs> handler)
         {
             if(RequestHandlers.ContainsKey(nameof(handler)))
@@ -127,7 +129,7 @@ namespace Microsoft.Web.WebView2.Core
         /// <param name="webview">WinForms.WebView2</param>
         /// <param name="handler">handler</param>
         /// <returns>WinForms.WebView2</returns>
-        public static WinForms.WebView2 RemoveRequestHandler(this WinForms.WebView2 webview,
+        public static WinForms.WebView2 RemoveRequestHandler(this Microsoft.Web.WebView2.WinForms.WebView2 webview,
             Action<CoreWebView2WebResourceRequestedEventArgs> handler)
         {
             if(RequestHandlers.ContainsKey(nameof(handler)))

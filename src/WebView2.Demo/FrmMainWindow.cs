@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.Core; 
 
 namespace WebView2.Demo
 {
@@ -19,18 +19,31 @@ namespace WebView2.Demo
             InitializeComponent();
             var webview = new Microsoft.Web.WebView2.WinForms.WebView2 () { Dock = DockStyle.Fill} ;
             this.Controls.Add(webview);
-            InitializeAsync(webview);
+            this.Size = new Size(1600, 900);
+            InitializeWebview2Async(webview, null, null, null, () => 
+                webview.RegisterApiDomain()
+                    .RegisterDataModels(this.GetType().Assembly)
+                    .RegisterObjectToScript(nameof(FrmMainWindow), this));
         }
 
         /// <summary>
-        /// webview2 初始化
+        /// Webview2 初始化
         /// </summary>
-        /// <param name="webview">WebView2</param>
-        public async void InitializeAsync(Microsoft.Web.WebView2.WinForms.WebView2 webview)
+        /// <param name="webview">Microsoft.Web.WebView2.WinForms.WebView2</param>
+        /// <param name="browserExecutableFolder">browserExecutableFolder</param>
+        /// <param name="userDataFolder">userDataFolder</param>
+        /// <param name="options">CoreWebView2EnvironmentOptions</param>
+        /// <param name="func">Func</param>
+        public async void InitializeWebview2Async(Microsoft.Web.WebView2.WinForms.WebView2 webview, 
+            string browserExecutableFolder = null,
+            string userDataFolder = null,
+            CoreWebView2EnvironmentOptions options = null,
+            Func<Microsoft.Web.WebView2.WinForms.WebView2> func = null)
         {
-            var userDataFolder = Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location),"UserData");
-            var env = await CoreWebView2Environment.CreateAsync(userDataFolder:userDataFolder);
-            await webview.EnsureCoreWebView2Async(env);
-        }
+            userDataFolder = userDataFolder ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"UserData");
+            var env = await CoreWebView2Environment.CreateAsync(browserExecutableFolder, userDataFolder, options);
+            await webview.EnsureCoreWebView2Async(env).ConfigureAwait(false);
+            func?.Invoke();
+        } 
     }
 }
