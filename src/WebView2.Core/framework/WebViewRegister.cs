@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace Microsoft.Web.WebView2.Core
@@ -19,8 +20,8 @@ namespace Microsoft.Web.WebView2.Core
         /// <summary>
         /// WebResourceRequested Events
         /// </summary>
-        public static readonly List<Action<CoreWebView2WebResourceRequestedEventArgs>> RequestHandlers =
-            new List<Action<CoreWebView2WebResourceRequestedEventArgs>>();
+        public static readonly Dictionary<string, Action<CoreWebView2WebResourceRequestedEventArgs>> RequestHandlers =
+            new Dictionary<string, Action<CoreWebView2WebResourceRequestedEventArgs>>();
         
         /// <summary>
         /// API 域名
@@ -52,7 +53,9 @@ namespace Microsoft.Web.WebView2.Core
             ApiDomain = domain;
             webview.CoreWebView2.AddWebResourceRequestedFilter($"{ApiDomain}/*", CoreWebView2WebResourceContext.All);
             webview.CoreWebView2.WebResourceRequested += CoreWebView2OnWebResourceRequested;
-            RequestHandlers.Add(WebApiRequested);
+            
+            if(RequestHandlers.ContainsKey(nameof(WebApiRequested)))
+                RequestHandlers.Add(nameof(WebApiRequested), WebApiRequested);
             return webview;
         }
 
@@ -88,7 +91,7 @@ namespace Microsoft.Web.WebView2.Core
         {
             if (RequestHandlers == null || !RequestHandlers.Any()) return;
             foreach (var handler in RequestHandlers) 
-                handler?.Invoke(e); 
+                handler.Value?.Invoke(e); 
         }
 
         /// <summary>
@@ -100,6 +103,36 @@ namespace Microsoft.Web.WebView2.Core
         public static WinForms.WebView2 RegisterDataModels(this WinForms.WebView2 webview, Assembly assembly)
         {
             Routes.AddRange(new DataModelProvider().ImportDataModelAssembly(assembly));
+            return webview;
+        }
+
+        /// <summary>
+        /// 注册请求事件
+        /// </summary>
+        /// <param name="webview">WinForms.WebView2</param>
+        /// <param name="handler">handler</param>
+        /// <returns>WinForms.WebView2</returns>
+        public static WinForms.WebView2 RegisterRequestHandler(this WinForms.WebView2 webview,
+            Action<CoreWebView2WebResourceRequestedEventArgs> handler)
+        {
+            if(RequestHandlers.ContainsKey(nameof(handler)))
+                RequestHandlers.Add(nameof(handler),handler);
+
+            return webview;
+        }
+        
+        /// <summary>
+        /// 删除请求事件
+        /// </summary>
+        /// <param name="webview">WinForms.WebView2</param>
+        /// <param name="handler">handler</param>
+        /// <returns>WinForms.WebView2</returns>
+        public static WinForms.WebView2 RemoveRequestHandler(this WinForms.WebView2 webview,
+            Action<CoreWebView2WebResourceRequestedEventArgs> handler)
+        {
+            if(RequestHandlers.ContainsKey(nameof(handler)))
+                RequestHandlers.Remove(nameof(handler));
+
             return webview;
         }
     }
