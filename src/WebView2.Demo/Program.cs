@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WebView2.FameworkCore
+namespace WebView2.Demo
 {
     static class Program
     {

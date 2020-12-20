@@ -1,4 +1,4 @@
-﻿namespace WebView2.FameworkCore
+﻿namespace WebView2.Demo
 {
     partial class FrmMainWindow
     {

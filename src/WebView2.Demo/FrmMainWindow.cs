@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WebView2.FameworkCore
+namespace WebView2.Demo
 {
     public partial class FrmMainWindow : Form
     {
