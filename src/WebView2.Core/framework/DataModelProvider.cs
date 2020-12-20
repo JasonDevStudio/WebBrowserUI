@@ -18,7 +18,7 @@ namespace Microsoft.Web.WebView2.Core
         /// 数据模型后缀
         /// </summary>
         public const string MODEL_SUFFIX = "Model";
-
+ 
         /// <summary>
         /// 将数据集导入数据模型
         /// </summary>
@@ -51,6 +51,7 @@ namespace Microsoft.Web.WebView2.Core
                 throw new TypeLoadException();
 
             var instance = (ViewModelBase) Activator.CreateInstance(type);
+            instance.WebView2Environment = WebViewRegister.WebView2Environment;
             return ImportDataModel(instance);
         }
 
@@ -144,7 +145,7 @@ namespace Microsoft.Web.WebView2.Core
             if (routes.Any(x => x.RoutePath == path && x.RouteMethod == method)) 
                 return default;
 
-            var routeConfig = new RouteConfig(method, routePath, handler);
+            var routeConfig = new RouteConfig(method, path, handler);
             routes.Add(routeConfig);
             return routeConfig;
         }

@@ -12,7 +12,8 @@ namespace WebView2.Demo.DataModels
         public CoreWebView2WebResourceResponse DataLoad(CoreWebView2WebResourceRequest request)
         {
             var context = "{\"Data\":1}";
-            return Text(context);
+            var response = Text(context);
+            return response;
         }
     }
 }

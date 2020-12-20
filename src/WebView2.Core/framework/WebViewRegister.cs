@@ -31,6 +31,12 @@ namespace Microsoft.Web.WebView2.Core
         public static string ApiDomain { get; private set; }
         
         /// <summary>
+        /// This represents the WebView2 Environment.
+        /// WebView2环境变量
+        /// </summary>
+        public static CoreWebView2Environment WebView2Environment { get; set; }
+        
+        /// <summary>
         /// 注册C#对象到脚本
         /// </summary>
         /// <param name="webview">WinForms.WebView2</param>
@@ -55,8 +61,8 @@ namespace Microsoft.Web.WebView2.Core
             ApiDomain = domain;
             webview.CoreWebView2.AddWebResourceRequestedFilter($"{ApiDomain}/*", CoreWebView2WebResourceContext.All);
             webview.CoreWebView2.WebResourceRequested += CoreWebView2OnWebResourceRequested;
-            
-            if(RequestHandlers.ContainsKey(nameof(WebApiRequested)))
+ 
+            if(!RequestHandlers.ContainsKey(nameof(WebApiRequested)))
                 RequestHandlers.Add(nameof(WebApiRequested), WebApiRequested);
             return webview;
         }
@@ -68,10 +74,10 @@ namespace Microsoft.Web.WebView2.Core
         public static void WebApiRequested(CoreWebView2WebResourceRequestedEventArgs e)
         {
             // 判断是否为API 域名请求
-            if (Regex.IsMatch(e.Request.Uri,@"^{"+ApiDomain+"}/{0,}.*",RegexOptions.IgnoreCase))
+            if (Regex.IsMatch(e.Request.Uri,@"^"+ApiDomain+"/{0,}.*",RegexOptions.IgnoreCase))
             {
                 // 提取域名之后的函数名称路径
-                var methodPath = Regex.Replace(e.Request.Uri, @"^{"+ApiDomain+"}/{0,}", string.Empty);
+                var methodPath = Regex.Replace(e.Request.Uri, @"^"+ApiDomain+"/{0,}", string.Empty);
                 
                 // 剔除路径的参数, 提取函数名称
                 methodPath = Regex.Replace(methodPath, @"\?.*",string.Empty).ToLower();
@@ -117,7 +123,7 @@ namespace Microsoft.Web.WebView2.Core
         public static WinForms.WebView2 RegisterRequestHandler(this Microsoft.Web.WebView2.WinForms.WebView2 webview,
             Action<CoreWebView2WebResourceRequestedEventArgs> handler)
         {
-            if(RequestHandlers.ContainsKey(nameof(handler)))
+            if(!RequestHandlers.ContainsKey(nameof(handler)))
                 RequestHandlers.Add(nameof(handler),handler);
 
             return webview;

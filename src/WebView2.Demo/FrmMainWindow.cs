@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,9 +26,37 @@ namespace WebView2.Demo
             this.Controls.Add(webview);
             this.Size = new Size(1600, 900);
             this.InitializeWebview2Async(webview, null, null, null, () => 
-                webview.RegisterApiDomain()
-                .RegisterDataModels(this.GetType().Assembly)
-                .RegisterObjectToScript(nameof(BridgeModel), new BridgeModel())); 
+                webview.RegisterDataModels(this.GetType().Assembly)
+                .RegisterObjectToScript(nameof(BridgeModel), new BridgeModel{ WebView2Environment = WebViewRegister.WebView2Environment })); 
+            
+            Task.Factory.StartNew(async () =>
+            {
+                using (HttpListener listener = new HttpListener())
+                {
+                    listener.Prefixes.Add($"http://localhost/");
+                    listener.Start();
+
+                    while (listener.IsListening)
+                    {
+                        var context = await listener.GetContextAsync();
+
+                        using (var response = context.Response)
+                        {
+                            for (int i = 0; i < context.Request.Headers.Count; i++)
+                            {
+                                Console.WriteLine($"{context.Request.Headers.GetKey(i)} : {context.Request.Headers.Get(i)}");
+                            }
+            
+                            using (var writer = new StreamWriter(response.OutputStream))
+                            {
+                                context.Response.ContentType = "text";
+                                writer.WriteLine("Test.");
+                                writer.Flush();
+                            }
+                        }
+                    }
+                }
+            });
             
             webview.Source = new Uri(Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "wwwroot","index.html"));
         }
@@ -47,8 +76,8 @@ namespace WebView2.Demo
             Func<Microsoft.Web.WebView2.WinForms.WebView2> func = null)
         {
             userDataFolder = userDataFolder ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"UserData");
-            var env = await CoreWebView2Environment.CreateAsync(browserExecutableFolder, userDataFolder, options).ConfigureAwait(false);
-            await webview.EnsureCoreWebView2Async(env).ConfigureAwait(false);
+            WebViewRegister.WebView2Environment = await CoreWebView2Environment.CreateAsync(browserExecutableFolder, userDataFolder, options).ConfigureAwait(false);
+            await webview.EnsureCoreWebView2Async(WebViewRegister.WebView2Environment).ConfigureAwait(false);
             
             if(func != null)
                 webview.Invoke(func);
