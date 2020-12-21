@@ -27,37 +27,10 @@ namespace WebView2.Demo
             this.Size = new Size(1600, 900);
             this.InitializeWebview2Async(webview, null, null, null, () => 
                 webview.RegisterDataModels(this.GetType().Assembly)
-                .RegisterObjectToScript(nameof(BridgeModel), new BridgeModel{ WebView2Environment = WebViewRegister.WebView2Environment })); 
+                    .RegisterApiDomain()
+                    .RegisterObjectToScript(nameof(BridgeModel), new BridgeModel{ WebView2Environment = WebViewRegister.WebView2Environment })); 
             
-            Task.Factory.StartNew(async () =>
-            {
-                using (HttpListener listener = new HttpListener())
-                {
-                    listener.Prefixes.Add($"http://localhost/");
-                    listener.Start();
-
-                    while (listener.IsListening)
-                    {
-                        var context = await listener.GetContextAsync();
-
-                        using (var response = context.Response)
-                        {
-                            for (int i = 0; i < context.Request.Headers.Count; i++)
-                            {
-                                Console.WriteLine($"{context.Request.Headers.GetKey(i)} : {context.Request.Headers.Get(i)}");
-                            }
-            
-                            using (var writer = new StreamWriter(response.OutputStream))
-                            {
-                                context.Response.ContentType = "text";
-                                writer.WriteLine("Test.");
-                                writer.Flush();
-                            }
-                        }
-                    }
-                }
-            });
-            
+             
             webview.Source = new Uri(Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "wwwroot","index.html"));
         }
 
