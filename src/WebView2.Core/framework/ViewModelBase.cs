@@ -27,7 +27,7 @@ namespace Microsoft.Web.WebView2.Core
         /// Json Hander
         /// </summary>
         private const string CONTENT_TYPE_APPLICATION_JSON = "application/json";
- 
+
         /// <summary>
         /// JsonSerializerOptions
         /// </summary>
@@ -37,7 +37,7 @@ namespace Microsoft.Web.WebView2.Core
             DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
-        
+
         /// <summary>
         /// GRPC Proto 对象 To CoreWebView2WebResourceResponse
         /// </summary>
@@ -87,11 +87,11 @@ namespace Microsoft.Web.WebView2.Core
             var stream = new MemoryStream(buffer);
             var response =
                 WebView2Environment.CreateWebResourceResponse(stream, (int) statusCode, nameof(statusCode), null);
-            response.Headers.AppendHeader("Content-Type", "application/json");
+            response.Headers.AppendHeader("Content-Type", "text/plain");
             response.Headers.AppendHeader("access-control-allow-origin", "*");
             return response;
-        } 
-        
+        }
+
         /// <summary>
         /// 判断是否JSON格式
         /// </summary>
@@ -112,25 +112,26 @@ namespace Microsoft.Web.WebView2.Core
         /// <param name="request">CoreWebView2WebResourceRequest</param>
         /// <returns>Encoding</returns>
         protected Encoding GetEncoding(CoreWebView2WebResourceRequest request)
-        { 
-                var encoding = request.Headers.GetHeader("Content-Type");;
+        {
+            var encoding = request.Headers.GetHeader("Content-Type");
+            ;
 
-                if (string.IsNullOrEmpty(encoding) || !encoding.Contains("charset=")) 
-                    encoding = "utf-8"; 
-                else
+            if (string.IsNullOrEmpty(encoding) || !encoding.Contains("charset="))
+                encoding = "utf-8";
+            else
+            {
+                // match "charset=xxx"
+                var match = Regex.Match(encoding, @"(?<=charset=)(([^;,\r\n]))*");
+
+                if (match.Success)
                 {
-                    // match "charset=xxx"
-                    var match = Regex.Match(encoding, @"(?<=charset=)(([^;,\r\n]))*");
-
-                    if (match.Success)
-                    {
-                        encoding = match.Value;
-                    }
+                    encoding = match.Value;
                 }
+            }
 
-                return Encoding.GetEncoding(encoding); 
+            return Encoding.GetEncoding(encoding);
         }
-        
+
         /// <summary>
         ///  将 Request Json 数据反序列化
         /// </summary>
@@ -141,7 +142,7 @@ namespace Microsoft.Web.WebView2.Core
         {
             if (!IsJson(request)) return default;
             if (request.Content == null) return default;
-            
+
             try
             {
                 var buffer = new Span<byte>();
@@ -152,21 +153,24 @@ namespace Microsoft.Web.WebView2.Core
             catch
             {
                 return default;
-            } 
+            }
         }
-        
+
         /// <summary>
         /// 解析参数
         /// </summary>
-        /// <param name="query">query string</param>
+        /// <param name="queryString">query string</param>
         /// <returns>NameValueCollection</returns>
-        protected NameValueCollection GetQueryParameters(string query)
+        protected NameValueCollection GetQueryParameters(string queryString)
         {
             var dicParameters = new NameValueCollection();
-            query = query.Trim('?');
-            foreach (var pair in query.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries))
+            queryString = queryString.Trim('?');
+            queryString = queryString.IndexOf('?') > -1
+                ? queryString.Substring(queryString.IndexOf('?') + 1)
+                : queryString;
+            foreach (var pair in queryString.Split(new char[] {'&'}, StringSplitOptions.RemoveEmptyEntries))
             {
-                var keyvalue = pair.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                var keyvalue = pair.Split(new char[] {'='}, StringSplitOptions.RemoveEmptyEntries);
                 switch (keyvalue.Length)
                 {
                     case 2:
@@ -189,14 +193,16 @@ namespace Microsoft.Web.WebView2.Core
         protected NameValueCollection GetQueryParameters(CoreWebView2WebResourceRequest request)
         {
             var buffer = new Span<byte>();
-            request.Content.Read(buffer); 
-            var query = GetEncoding(request).GetString(buffer);
+            request.Content.Read(buffer);
+            var queryString = GetEncoding(request).GetString(buffer);
             var dicParameters = new NameValueCollection();
-            query = query.Trim('?');
-
-            foreach (var pair in query.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries))
+            queryString = queryString.Trim('?');
+            queryString = queryString.IndexOf('?') > -1
+                ? queryString.Substring(queryString.IndexOf('?') + 1)
+                : queryString;
+            foreach (var pair in queryString.Split(new char[] {'&'}, StringSplitOptions.RemoveEmptyEntries))
             {
-                var keyvalue = pair.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                var keyvalue = pair.Split(new char[] {'='}, StringSplitOptions.RemoveEmptyEntries);
                 if (keyvalue.Length == 2)
                 {
                     dicParameters.Add(keyvalue[0], Uri.UnescapeDataString(keyvalue[1]));

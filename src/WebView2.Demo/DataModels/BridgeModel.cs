@@ -11,8 +11,8 @@ namespace WebView2.Demo.DataModels
         [Get("DataLoad")]
         public CoreWebView2WebResourceResponse DataLoad(CoreWebView2WebResourceRequest request)
         {
-            var context = "{\"Data\":1}";
-            var response = Text(context);
+            var context = GetQueryParameters(request.Uri);
+            var response = Text(context["Name"]);
             return response;
         }
     }
