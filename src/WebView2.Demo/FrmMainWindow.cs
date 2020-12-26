@@ -26,12 +26,10 @@ namespace WebView2.Demo
             this.Controls.Add(webview);
             this.Size = new Size(1600, 900);
             this.InitializeWebview2Async(webview, null, null, null, () => 
-                webview.RegisterDataModels(this.GetType().Assembly)
-                    .RegisterApiDomain()
-                    .RegisterObjectToScript(nameof(BridgeModel), new BridgeModel{ WebView2Environment = WebViewRegister.WebView2Environment })); 
+               AppRuntime.RunTime.RegisterWebViewControl(webview).GoUri(webview, new Uri("http://main.app.local/index.html")));  
             
-             
-            webview.Source = new Uri(Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "wwwroot","index.html"));
+            //.GoUri(webview,new Uri("http://main.app.local/wwwroot/index.html"))
+            // webview.Source = new Uri(Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "wwwroot","index.html"));
         }
 
         /// <summary>
@@ -42,15 +40,15 @@ namespace WebView2.Demo
         /// <param name="userDataFolder">userDataFolder</param>
         /// <param name="options">CoreWebView2EnvironmentOptions</param>
         /// <param name="func">Func</param>
-        public async void InitializeWebview2Async(Microsoft.Web.WebView2.WinForms.WebView2 webview, 
+        public async Task InitializeWebview2Async(Microsoft.Web.WebView2.WinForms.WebView2 webview, 
             string browserExecutableFolder = null,
             string userDataFolder = null,
             CoreWebView2EnvironmentOptions options = null,
-            Func<Microsoft.Web.WebView2.WinForms.WebView2> func = null)
+            Func<AppRuntime> func = null)
         {
             userDataFolder = userDataFolder ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"UserData");
-            WebViewRegister.WebView2Environment = await CoreWebView2Environment.CreateAsync(browserExecutableFolder, userDataFolder, options).ConfigureAwait(false);
-            await webview.EnsureCoreWebView2Async(WebViewRegister.WebView2Environment).ConfigureAwait(false);
+            AppRuntime.RunTime.WebView2Environment = await CoreWebView2Environment.CreateAsync(browserExecutableFolder, userDataFolder, options);
+            await webview.EnsureCoreWebView2Async(AppRuntime.RunTime.WebView2Environment);
             
             if(func != null)
                 webview.Invoke(func);

@@ -23,17 +23,15 @@
 
     <ItemGroup>
       <None Remove="wwwroot\js\index.js" />
-      <EmbeddedResource Include="wwwroot\js\index.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
+      <EmbeddedResource Include="wwwroot\js\index.js" />
       <None Remove="wwwroot\js\jquery-3.5.1.min.js" />
-      <EmbeddedResource Include="wwwroot\js\jquery-3.5.1.min.js">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
+      <EmbeddedResource Include="wwwroot\js\jquery-3.5.1.min.js" />
       <None Remove="wwwroot\index.html" />
       <EmbeddedResource Include="wwwroot\index.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <None Remove="wwwroot\index2.html" />
+      <EmbeddedResource Include="wwwroot\index2.html" />
     </ItemGroup>
 
 </Project>

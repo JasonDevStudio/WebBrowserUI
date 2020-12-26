@@ -51,7 +51,7 @@ namespace Microsoft.Web.WebView2.Core
                 throw new TypeLoadException();
 
             var instance = (ViewModelBase) Activator.CreateInstance(type);
-            instance.WebView2Environment = WebViewRegister.WebView2Environment;
+            AppRuntime.RunTime.WebView2Environment = AppRuntime.RunTime.WebView2Environment;
             return ImportDataModel(instance);
         }
 

@@ -111,4 +111,18 @@ namespace Microsoft.Web.WebView2.Core
         {
         }
     }
+    
+    /// <summary>
+    /// HeadAttribute Route Method
+    /// </summary>
+    public sealed class OptionsAttribute : RouteMethodAttribute
+    {
+        /// <summary>
+        /// Options
+        /// </summary>
+        /// <param name="routePath">路由地址</param>
+        public OptionsAttribute(string routePath = null) : base(HttpMethod.Options, routePath)
+        {
+        }
+    }
 }

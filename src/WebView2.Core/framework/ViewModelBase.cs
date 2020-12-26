@@ -18,12 +18,6 @@ namespace Microsoft.Web.WebView2.Core
     public class ViewModelBase
     {
         /// <summary>
-        /// This represents the WebView2 Environment.
-        /// WebView2环境变量
-        /// </summary>
-        public CoreWebView2Environment WebView2Environment { get; set; }
-
-        /// <summary>
         /// Json Hander
         /// </summary>
         private const string CONTENT_TYPE_APPLICATION_JSON = "application/json";
@@ -48,8 +42,7 @@ namespace Microsoft.Web.WebView2.Core
         {
             var buffer = data.ToByteArray();
             var stream = new MemoryStream(buffer);
-            var response =
-                WebView2Environment.CreateWebResourceResponse(stream, (int) statusCode, nameof(statusCode), null);
+            var response = AppRuntime.RunTime.WebView2Environment.CreateWebResourceResponse(stream, (int) statusCode, nameof(statusCode), null);
             response.Headers.AppendHeader("Content-Type", "application/json");
             response.Headers.AppendHeader("access-control-allow-origin", "*");
             return response;
@@ -68,8 +61,7 @@ namespace Microsoft.Web.WebView2.Core
             var json = System.Text.Json.JsonSerializer.Serialize(data, jsonSerializerOptions);
             var buffer = Encoding.UTF8.GetBytes(json);
             var stream = new MemoryStream(buffer);
-            var response =
-                WebView2Environment.CreateWebResourceResponse(stream, (int) statusCode, nameof(statusCode), null);
+            var response = AppRuntime.RunTime.WebView2Environment.CreateWebResourceResponse(stream, (int) statusCode, nameof(statusCode), null);
             response.Headers.AppendHeader("Content-Type", "application/json");
             response.Headers.AppendHeader("access-control-allow-origin", "*");
             return response;
@@ -85,8 +77,7 @@ namespace Microsoft.Web.WebView2.Core
         {
             var buffer = Encoding.UTF8.GetBytes(data);
             var stream = new MemoryStream(buffer);
-            var response =
-                WebView2Environment.CreateWebResourceResponse(stream, (int) statusCode, nameof(statusCode), null);
+            var response = AppRuntime.RunTime.WebView2Environment.CreateWebResourceResponse(stream, (int) statusCode, nameof(statusCode), null);
             response.Headers.AppendHeader("Content-Type", "text/plain");
             response.Headers.AppendHeader("access-control-allow-origin", "*");
             return response;
