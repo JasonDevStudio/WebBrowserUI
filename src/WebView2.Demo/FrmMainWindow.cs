@@ -26,7 +26,7 @@ namespace WebView2.Demo
             this.Controls.Add(webview);
             this.Size = new Size(1600, 900);
             this.InitializeWebview2Async(webview, null, null, null, () => 
-               AppRuntime.RunTime.RegisterWebViewControl(webview).GoUri(webview, new Uri("http://main.app.local/index.html")));  
+               AppRuntime.RunTime.RegisterWebViewControl(webview).GoUri(webview, new Uri("http://main.app.service/index.html")));  
             
             //.GoUri(webview,new Uri("http://main.app.local/wwwroot/index.html"))
             // webview.Source = new Uri(Path.Combine(Path.GetDirectoryName(this.GetType().Assembly.Location), "wwwroot","index.html"));

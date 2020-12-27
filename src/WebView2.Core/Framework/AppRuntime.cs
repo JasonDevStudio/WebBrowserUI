@@ -35,7 +35,12 @@ namespace Microsoft.Web.WebView2.Core
         /// <summary>
         /// Embedded Resources
         /// </summary>
-        public List<(string uri,string dir,Assembly resource)> ResourcesHandlers { get; } = new List<(string uri,string dir,Assembly resource)>();
+        public List<(string uri,string dir,Assembly resource)> EmbeddedResourcesHandlers { get; } = new List<(string uri,string dir,Assembly resource)>();
+        
+        /// <summary>
+        /// Local Resources
+        /// </summary>
+        public List<(string uri,string dir,Assembly resource)> LocalResourcesHandlers { get; } = new List<(string uri,string dir,Assembly resource)>();
         
         /// <summary>
         /// API 域名
@@ -84,11 +89,28 @@ namespace Microsoft.Web.WebView2.Core
         /// <returns></returns>
         public AppRuntime RegisterEmbeddedResourceDomain(string uri, string dir, Assembly assembly)
         {
-            if(!ResourcesHandlers.Any(m=>m.uri == uri && m.dir.ToUpper() == dir.ToUpper()))
-                ResourcesHandlers.Add((uri, dir, assembly));
+            if(!EmbeddedResourcesHandlers.Any(m=>m.uri == uri && m.dir.ToUpper() == dir.ToUpper()))
+                EmbeddedResourcesHandlers.Add((uri, dir, assembly));
             
             if(!RequestHandlers.ContainsKey(nameof(EmbeddedResourceHandler.EmbeddedResourcesRequested)))
                 RequestHandlers.Add(nameof(EmbeddedResourceHandler.EmbeddedResourcesRequested), EmbeddedResourceHandler.EmbeddedResourcesRequested);
+            
+            return this;
+        }
+        
+        /// <summary>
+        /// 注册内嵌资源拦截域名和程序集
+        /// </summary>
+        /// <param name="uri">uri</param>
+        /// <param name="assembly">Assembly</param>
+        /// <returns></returns>
+        public AppRuntime RegisterLocalResourceDomain(string uri, string dir, Assembly assembly)
+        {
+            if(!LocalResourcesHandlers.Any(m=>m.uri == uri && m.dir.ToUpper() == dir.ToUpper()))
+                LocalResourcesHandlers.Add((uri, dir, assembly));
+            
+            if(!RequestHandlers.ContainsKey(nameof(LocalResourceHandler.LocalResourcesRequested)))
+                RequestHandlers.Add(nameof(LocalResourceHandler.LocalResourcesRequested), LocalResourceHandler.LocalResourcesRequested);
             
             return this;
         }
@@ -139,8 +161,8 @@ namespace Microsoft.Web.WebView2.Core
         {
             webview.CoreWebView2.AddWebResourceRequestedFilter($"{this.ApiDomain}/*", CoreWebView2WebResourceContext.All);
  
-            if (ResourcesHandlers.Any()) 
-                foreach (var obj in ResourcesHandlers) 
+            if (EmbeddedResourcesHandlers.Any()) 
+                foreach (var obj in EmbeddedResourcesHandlers) 
                     webview.CoreWebView2.AddWebResourceRequestedFilter($"{obj.uri}/*", CoreWebView2WebResourceContext.All);  
              
             if(HostObjects.Any()) 

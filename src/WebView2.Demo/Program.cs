@@ -21,8 +21,9 @@ namespace WebView2.Demo
             Application.SetCompatibleTextRenderingDefault(false);
 
             AppRuntime.RunTime.RegisterDataModels(typeof(Program).Assembly)
-                .RegisterApiDomain()
-                .RegisterEmbeddedResourceDomain("http://main.app.local", "wwwroot",typeof(Program).Assembly);
+                .RegisterApiDomain("http://api.app.service")
+                .RegisterEmbeddedResourceDomain("http://main.app.service", "wwwroot",typeof(Program).Assembly)
+                .RegisterLocalResourceDomain("http://local.app.service","wwwroot",typeof(Program).Assembly);
                 // .RegisterObjectToScript(nameof(BridgeModel), new BridgeModel());
             
             Application.Run(new FrmMainWindow());
