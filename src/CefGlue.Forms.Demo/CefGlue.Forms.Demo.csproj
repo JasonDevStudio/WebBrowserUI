@@ -5,7 +5,9 @@
         <TargetFramework>net5.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
-
+    <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+      <DefineConstants>WINDOWS</DefineConstants>
+    </PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\CefGlue.Core\CefGlue.Core.csproj" />
     </ItemGroup>

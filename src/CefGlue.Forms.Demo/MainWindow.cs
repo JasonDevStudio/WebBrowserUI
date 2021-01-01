@@ -1,11 +1,12 @@
-﻿namespace CefGlue.Forms.Demo
-{
-    using System;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Windows.Forms;
-    using Xilium.CefGlue;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+using Xilium.CefGlue;
+using Xilium.CefGlue.Forms.Browser;
 
+namespace CefGlue.Forms.Demo
+{
     /// <summary>
     /// Defines the <see cref="MainWindow" />.
     /// </summary>
@@ -15,16 +16,6 @@
         /// Defines the _handleCreated.
         /// </summary>
         private bool _handleCreated;
-
-        /// <summary>
-        /// Defines the _browser.
-        /// </summary>
-        private CefBrowser _browser;
-
-        /// <summary>
-        /// Defines the _browserWindowHandle.
-        /// </summary>
-        private IntPtr _browserWindowHandle;
 
         /// <summary>
         /// Gets or sets the StartUrl.
@@ -37,12 +28,29 @@
         public CefBrowserSettings BrowserSettings { get; set; }
 
         /// <summary>
+        /// Gets or sets the WindowInfo
+        /// WindowInfo.
+        /// </summary>
+        public CefWindowInfo WindowInfo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CefWebClient
+        /// CefWebClient.
+        /// </summary>
+        internal WebClient WebClient { get; set; }
+
+        /// <summary>
+        /// Defines the WebBrowser.
+        /// </summary>
+        internal Xilium.CefGlue.Forms.Browser.WebBrowser WebBrowser { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
         public MainWindow()
         {
-            InitializeComponent();
-
+            this.InitializeComponent();
+            
             SetStyle(
                 ControlStyles.ContainerControl
                 | ControlStyles.ResizeRedraw
@@ -70,6 +78,11 @@
             this.StartUrl = "http://www.google.com";
         }
 
+        private void WebBrowser_Created(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// The OnHandleCreated.
         /// </summary>
@@ -84,15 +97,13 @@
             }
             else
             {
-                var windowInfo = CefWindowInfo.Create();
-                windowInfo.SetAsChild(Handle, new CefRectangle { X = 0, Y = 0, Width = Width, Height = Height });
-
-                var client = CreateWebClient();
-
-                var settings = BrowserSettings;
-                if (settings == null) settings = new CefBrowserSettings { };
-
-                CefBrowserHost.CreateBrowser(windowInfo, client, settings, StartUrl);
+                this.WindowInfo = CefWindowInfo.Create();
+                this.WindowInfo.SetAsChild(Handle, new CefRectangle { X = 0, Y = 0, Width = Width, Height = Height });                 
+                this.BrowserSettings = new CefBrowserSettings { };
+                this.WebBrowser = new Xilium.CefGlue.Forms.Browser.WebBrowser(this, this.BrowserSettings, this.StartUrl);
+                this.WebBrowser.Create(this.WindowInfo);
+                this.WebClient = new WebClient(this.WebBrowser);
+               // this.WebBrowser.Created += (sender, args) => this.WebBrowser.CefBrowser.GetHost().ShowDevTools(this.WindowInfo, this.WebClient, this.BrowserSettings, new CefPoint());
             }
 
             _handleCreated = true;
@@ -128,13 +139,13 @@
             }
         }
 
-        /// <summary>
-        /// The CreateWebClient.
-        /// </summary>
-        /// <returns>The <see cref="CefWebClient"/>.</returns>
-        protected virtual CefWebClient CreateWebClient()
+        private void button1_Click(object sender, EventArgs e)
         {
-            return new CefWebClient();
+            var host = this.WebBrowser?.CefBrowser?.GetHost();
+            var wi = CefWindowInfo.Create();
+            wi.SetAsPopup(IntPtr.Zero, "DevTools");
+            var client = new WebClient(this.WebBrowser);
+            host.ShowDevTools(wi, client, this.BrowserSettings, new CefPoint(0,0));
         }
     }
 }

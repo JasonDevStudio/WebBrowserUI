@@ -68,7 +68,6 @@
                 );
         }
 
-
         /// <summary>
         /// Returns true if this object is pointing to the same context as |that|
         /// object.

@@ -18,7 +18,7 @@ namespace CefGlue.Forms.Demo
         {
             try
             {
-                Application.SetHighDpiMode(HighDpiMode.SystemAware);
+                Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
@@ -42,8 +42,8 @@ namespace CefGlue.Forms.Demo
                 //foreach (var arg in args) { if (arg.StartsWith("--type=")) { return -2; } }
 
                 CefRuntime.Initialize(mainArgs, settings, null, IntPtr.Zero);
-
-                Application.Run(new MainWindow());
+                
+                Application.Run(new MainWindow()); 
             }
             catch (Exception)
             {

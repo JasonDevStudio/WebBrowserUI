@@ -51,7 +51,6 @@
         // The below values map to WebPreferences settings.
 
         #region Font Settings
-
         public string StandardFontFamily
         {
             get { return cef_string_t.ToString(&_self->standard_font_family); }
