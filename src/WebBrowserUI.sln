@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CefGlue.Demo", "CefGlue.Dem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CefGlue.Forms", "CefGlue.Forms\CefGlue.Forms.csproj", "{32CF73BB-4D3E-4956-87E4-A0CE7584B905}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue.Lib", "CefGlue.Lib\CefGlue.Lib.csproj", "{90278647-19F4-42B3-A9D7-F62A35F4F7FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CefGlue.Lib", "CefGlue.Lib\CefGlue.Lib.csproj", "{90278647-19F4-42B3-A9D7-F62A35F4F7FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
