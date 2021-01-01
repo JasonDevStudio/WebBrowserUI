@@ -1,4 +1,4 @@
-﻿namespace CefGlue.Forms.Demo
+﻿namespace CefGlue.Demo
 {
     using System;
     using System.Drawing;
@@ -7,9 +7,9 @@
     using Xilium.CefGlue;
 
     /// <summary>
-    /// Defines the <see cref="MainWindow" />.
+    /// Defines the <see cref="MainControl" />.
     /// </summary>
-    public partial class MainWindow : Form
+    public class MainControl : Control
     {
         #region Fields
 
@@ -23,12 +23,10 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// Initializes a new instance of the <see cref="MainControl"/> class.
         /// </summary>
-        public MainWindow()
+        public MainControl()
         {
-            this.InitializeComponent();
-
             SetStyle(
                 ControlStyles.ContainerControl
                 | ControlStyles.ResizeRedraw
@@ -128,20 +126,6 @@
             }
 
             _handleCreated = true;
-        }
-
-        /// <summary>
-        /// The button1_Click.
-        /// </summary>
-        /// <param name="sender">The sender<see cref="object"/>.</param>
-        /// <param name="e">The e<see cref="EventArgs"/>.</param>
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var host = this.WebBrowser.CefBrowser.GetHost();
-            var wi = CefWindowInfo.Create();
-            wi.SetAsPopup(IntPtr.Zero, "DevTools");
-            var client = new CefGlue.Lib.Browser.WebClient(this.WebBrowser);
-            host.ShowDevTools(wi, client, this.BrowserSettings, new CefPoint(0, 0));
         }
 
         /// <summary>

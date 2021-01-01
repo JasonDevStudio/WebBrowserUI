@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CefGlue.Core\CefGlue.Core.csproj" />
+      <ProjectReference Include="..\CefGlue\CefGlue.csproj" />
     </ItemGroup>
 
 </Project>

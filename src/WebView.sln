@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebView2.Demo", "WebView2.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebView2.Core", "WebView2.Core\WebView2.Core.csproj", "{E7DE36F3-2DF1-450F-871A-3B4E6740F6F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CefGlue.Core", "CefGlue.Core\CefGlue.Core.csproj", "{35F06DBC-C023-46F9-8635-DFD9739032FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CefGlue", "CefGlue\CefGlue.csproj", "{35F06DBC-C023-46F9-8635-DFD9739032FA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CefGlue.Demo", "CefGlue.Demo\CefGlue.Demo.csproj", "{783C3AFB-B35E-4E85-8765-B06AF7D641AE}"
 EndProject

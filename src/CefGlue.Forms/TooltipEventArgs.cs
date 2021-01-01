@@ -1,15 +1,37 @@
-﻿using System;
-
-namespace Xilium.CefGlue.WindowsForms
+﻿namespace Xilium.CefGlue.WindowsForms
 {
-	public class TooltipEventArgs : EventArgs
-	{
-		public TooltipEventArgs(string text)
-		{
-			Text = text;
-		}
+    using System;
 
-		public string Text { get; private set; }
-		public bool Handled { get; set; }
-	}
+    /// <summary>
+    /// Defines the <see cref="TooltipEventArgs" />.
+    /// </summary>
+    public class TooltipEventArgs : EventArgs
+    {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TooltipEventArgs"/> class.
+        /// </summary>
+        /// <param name="text">The text<see cref="string"/>.</param>
+        public TooltipEventArgs(string text)
+        {
+            Text = text;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Handled.
+        /// </summary>
+        public bool Handled { get; set; }
+
+        /// <summary>
+        /// Gets the Text.
+        /// </summary>
+        public string Text { get; private set; }
+
+        #endregion
+    }
 }
