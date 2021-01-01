@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebView2.Core", "WebView2.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CefGlue.Core", "CefGlue.Core\CefGlue.Core.csproj", "{35F06DBC-C023-46F9-8635-DFD9739032FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue.Forms.Demo", "CefGlue.Forms.Demo\CefGlue.Forms.Demo.csproj", "{783C3AFB-B35E-4E85-8765-B06AF7D641AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefGlue.Forms", "CefGlue.Forms\CefGlue.Forms.csproj", "{32CF73BB-4D3E-4956-87E4-A0CE7584B905}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{35F06DBC-C023-46F9-8635-DFD9739032FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35F06DBC-C023-46F9-8635-DFD9739032FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35F06DBC-C023-46F9-8635-DFD9739032FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{783C3AFB-B35E-4E85-8765-B06AF7D641AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{783C3AFB-B35E-4E85-8765-B06AF7D641AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{783C3AFB-B35E-4E85-8765-B06AF7D641AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{783C3AFB-B35E-4E85-8765-B06AF7D641AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32CF73BB-4D3E-4956-87E4-A0CE7584B905}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32CF73BB-4D3E-4956-87E4-A0CE7584B905}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32CF73BB-4D3E-4956-87E4-A0CE7584B905}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32CF73BB-4D3E-4956-87E4-A0CE7584B905}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
