@@ -1,9 +1,5 @@
 ﻿using CefGlue.Lib.Browser;
-using CefGlue.Lib.Framework;
-using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using Xilium.CefGlue;
 
 namespace CefGlue.Lib.Hanlers
 {
@@ -19,7 +15,7 @@ namespace CefGlue.Lib.Hanlers
         /// </summary>
         /// <param name="request">The request<see cref="WebRequest"/>.</param>
         /// <returns>The <see cref="WebResponse"/>.</returns>
-        public WebResponse EmbeddedResourcesRequested(WebRequest request)
+        public override WebResponse ExecuteCore(WebRequest request)
         { 
             // 判断是否满足嵌入资源拦截
             if (!string.IsNullOrWhiteSpace(this.Domain) && this.ResourceAssembly != null)
@@ -30,7 +26,7 @@ namespace CefGlue.Lib.Hanlers
                 // 剔除路径的参数, 提取资源路径
                 resourcePath = Regex.Replace(resourcePath, @"\?.*", string.Empty).ToLower();
 
-                var memiType = CefRuntime.GetMimeType(resourcePath);
+                var memiType = MimeMapping.MimeUtility.GetMimeMapping(resourcePath);
 
                 resourcePath = resourcePath.Replace("/", ".");
 

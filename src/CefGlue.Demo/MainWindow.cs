@@ -54,7 +54,7 @@
                 | ControlStyles.Selectable,
                 true);
 
-            this.StartUrl = "http://www.google.com";
+            this.StartUrl = "http://main.app.service/home.html"; 
         }
 
         #endregion
@@ -101,7 +101,7 @@
             var host = this.WebBrowser.CefBrowser.GetHost();
             var wi = CefWindowInfo.Create();
             wi.SetAsPopup(IntPtr.Zero, "DevTools");
-            var client = new CefGlue.Lib.Browser.WebClient(this.WebBrowser);
+            var client = new DevToolsWebClient();
             host.ShowDevTools(wi, client, this.BrowserSettings, new CefPoint(0, 0));
         }
 
@@ -125,9 +125,9 @@
                 this.WebBrowser = new CefGlue.Lib.Browser.WebBrowser(this, this.BrowserSettings, this.StartUrl);
                 this.WebBrowser.Create(this.WindowInfo);
                 this.WebClient = new CefGlue.Lib.Browser.WebClient(this.WebBrowser);
-                // this.WebBrowser.Created += (sender, args) => this.WebBrowser.CefBrowser.GetHost().ShowDevTools(this.WindowInfo, this.WebClient, this.BrowserSettings, new CefPoint());
+                this.WebBrowser.Created += (sender, args) => this.ShowDevTools();
             }
-
+             
             _handleCreated = true;
         }
 
@@ -138,11 +138,7 @@
         /// <param name="e">The e<see cref="EventArgs"/>.</param>
         private void button1_Click(object sender, EventArgs e)
         {
-            var host = this.WebBrowser.CefBrowser.GetHost();
-            var wi = CefWindowInfo.Create();
-            wi.SetAsPopup(IntPtr.Zero, "DevTools");
-            var client = new DevToolsWebClient();
-            host.ShowDevTools(wi, client, this.BrowserSettings, new CefPoint(0, 0));
+            this.ShowDevTools();
         }
 
         /// <summary>

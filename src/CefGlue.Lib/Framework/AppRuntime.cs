@@ -88,7 +88,7 @@ namespace CefGlue.Lib.Framework
             if (!EmbeddedResourcesHandlers.Any(m => m.scheme == scheme && m.domain == domain && m.dir.ToUpper() == dir.ToUpper()))
             {
                 EmbeddedResourcesHandlers.Add((scheme, domain,dir, assembly));
-                CefRuntime.RegisterSchemeHandlerFactory(scheme, domain, new ResourceHandlerFactory<EmbeddedResourceHandler>{Scheme = scheme, Domain = domain,Dir = dir, ResourceAssembly = assembly});
+                CefRuntime.RegisterSchemeHandlerFactory(scheme, domain, new ResourceHandlerFactory<EmbeddedResourceHandler> { Scheme = scheme, Domain = domain, Dir = dir,ResourceAssembly = assembly });
             }
 
             return this;
@@ -123,6 +123,14 @@ namespace CefGlue.Lib.Framework
             return this;
         }
 
+        /// <summary>
+        /// 初始化浏览器
+        /// </summary>
+        /// <param name="settings">CefSettings</param>
+        /// <param name="mainArgs">CefMainArgs</param>
+        /// <param name="runtimePath">runtimePath</param>
+        /// <param name="func">func</param>
+        /// <returns>AppRuntime</returns>
         public AppRuntime Initialize(CefSettings settings = null, CefMainArgs mainArgs = null,string runtimePath = null,Func<AppRuntime> func = null)
         {
             runtimePath ??= Path.Combine(Path.GetDirectoryName(typeof(AppRuntime).Assembly.Location), "cef64");
@@ -139,7 +147,12 @@ namespace CefGlue.Lib.Framework
             cefSettings.BrowserSubprocessPath = settings?.BrowserSubprocessPath;
             cefSettings.FrameworkDirPath = settings?.FrameworkDirPath;
             
+            var formiumApp = new FormiumApp();
             mainArgs ??= new CefMainArgs(new string[0]);
+            CefRuntime.ExecuteProcess(mainArgs, formiumApp, IntPtr.Zero);           
+            CefRuntime.Initialize(mainArgs, cefSettings, formiumApp, IntPtr.Zero);
+
+            func?.Invoke();
             
             return this;
         }

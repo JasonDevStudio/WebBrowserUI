@@ -17,7 +17,7 @@ namespace CefGlue.Lib.Hanlers
         /// </summary>
         /// <param name="request">The request<see cref="WebRequest"/>.</param>
         /// <returns>The <see cref="WebResponse"/>.</returns>
-        public WebResponse WebApiRequested(WebRequest request)
+        public override WebResponse ExecuteCore(WebRequest request)
         {
             // 判断是否为API 域名请求
             if (Regex.IsMatch(request.RequestUrl, @"^" + this.Uri + "/{0,}.*", RegexOptions.IgnoreCase))

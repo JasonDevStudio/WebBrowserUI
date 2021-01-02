@@ -1,5 +1,6 @@
 ﻿using CefGlue.Lib.Browser;
-using CefGlue.Lib.Framework;
+using CefGlue.Lib.Framework; 
+using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -19,7 +20,7 @@ namespace CefGlue.Lib.Hanlers
         /// </summary>
         /// <param name="request">The request<see cref="WebRequest"/>.</param>
         /// <returns>The <see cref="WebResponse"/>.</returns>
-        public WebResponse LocalResourcesRequested(WebRequest request)
+        public override WebResponse ExecuteCore(WebRequest request)
         {
             var resourceAssemblyPath = Path.GetDirectoryName(this.ResourceAssembly.Location);
             
@@ -32,7 +33,7 @@ namespace CefGlue.Lib.Hanlers
                 // 剔除路径的参数, 提取资源路径
                 resourcePath = Regex.Replace(resourcePath, @"\?.*", string.Empty).ToLower();
 
-                var memiType = CefRuntime.GetMimeType(resourcePath);
+                var memiType = MimeMapping.MimeUtility.GetMimeMapping(resourcePath); 
                 var fileInfo = new FileInfo($"{resourceAssemblyPath}.{this.Dir}.{resourcePath}");
                 if (fileInfo.Exists)
                 {

@@ -11,7 +11,7 @@ namespace CefGlue.Lib.Hanlers
     /// <summary>
     /// Defines the <see cref="ResourceHandlerBase" />.
     /// </summary>
-    public class ResourceHandlerBase : CefResourceHandler
+    public abstract class ResourceHandlerBase : CefResourceHandler
     {
         #region Fields
 
@@ -117,8 +117,8 @@ namespace CefGlue.Lib.Hanlers
         /// <returns>The <see cref="bool"/>.</returns>
         protected override bool ProcessRequest(CefRequest request, CefCallback callback)
         {
-
-
+            var webRequest = CefGlue.Lib.Browser.WebRequest.Create(request);
+            this.respData = this.ExecuteCore(webRequest);  
             callback.Continue();
             return true;
         }
@@ -192,6 +192,13 @@ namespace CefGlue.Lib.Hanlers
             bytesSkipped = (long)CefErrorCode.Failed;
             return false;
         }
+
+        /// <summary>
+        /// ExecuteCore
+        /// </summary>
+        /// <param name="request">WebRequest</param>
+        /// <returns>WebResponse</returns>
+        public abstract WebResponse ExecuteCore(CefGlue.Lib.Browser.WebRequest request);
 
         #endregion
     }

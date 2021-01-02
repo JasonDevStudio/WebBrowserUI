@@ -9,14 +9,19 @@
       <DefineConstants>WINDOWS</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
+      <None Remove="wwwroot\home.html" />
+      <None Remove="wwwroot\js\home.js" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="wwwroot\home.html" />
+      <EmbeddedResource Include="wwwroot\js\home.js" />
+    </ItemGroup>
+    <ItemGroup>
       <ProjectReference Include="..\CefGlue.Lib\CefGlue.Lib.csproj" />
       <ProjectReference Include="..\CefGlue\CefGlue.csproj" />
     </ItemGroup>
     <ItemGroup>
       <Compile Update="MainControl.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="wwwroot" />
     </ItemGroup>
 
 </Project>

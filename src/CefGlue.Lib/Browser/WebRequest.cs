@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Json;
 using System.Net.Http;
@@ -58,7 +59,8 @@ namespace CefGlue.Lib.Browser
         /// <param name="postData">The postData<see cref="byte[]"/>.</param>
         /// <param name="uploadFiles">The uploadFiles<see cref="string[]"/>.</param>
         /// <param name="cefRequest">The cefRequest<see cref="CefRequest"/>.</param>
-        public WebRequest(Uri uri, string method, NameValueCollection headers, byte[] postData, string[] uploadFiles, CefRequest cefRequest)
+        public WebRequest(Uri uri, string method, NameValueCollection headers, byte[] postData, string[] uploadFiles,
+            CefRequest cefRequest)
         {
             Uri = uri;
             _method = method;
@@ -88,6 +90,20 @@ namespace CefGlue.Lib.Browser
                     JsonData = string.Empty;
                 }
             }
+        }
+
+        /// <summary>
+        /// 创建 WebRequest
+        /// </summary>
+        /// <param name="request">CefRequest</param>
+        /// <returns>WebRequest</returns>
+        public static WebRequest Create(CefRequest request)
+        {
+            var uri = new Uri(request.Url);
+            var headers = request.GetHeaderMap();
+            (byte[] rawData, string[] uploadFiles) = GetPostData(request);
+            var webRequest = new WebRequest(uri, request.Method, headers, rawData, uploadFiles, request);
+            return webRequest;
         }
 
         #endregion
@@ -161,7 +177,7 @@ namespace CefGlue.Lib.Browser
         /// <summary>
         /// Gets the Method.
         /// </summary>
-        public HttpMethod Method { get; set; } 
+        public HttpMethod Method { get; set; }
 
         /// <summary>
         /// Gets the QueryString.
@@ -234,7 +250,6 @@ namespace CefGlue.Lib.Browser
                 try
                 {
                     return JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(RawData), _jsonSerializerOptions);
-
                 }
                 catch
                 {
@@ -252,7 +267,6 @@ namespace CefGlue.Lib.Browser
         /// <returns>The <see cref="NameValueCollection"/>.</returns>
         private NameValueCollection ProcessFormData(byte[] rawData)
         {
-
             var query = ContentEncoding.GetString(rawData);
 
             var retval = new NameValueCollection();
@@ -260,9 +274,9 @@ namespace CefGlue.Lib.Browser
 
             query = query.Trim('?');
 
-            foreach (var pair in query.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var pair in query.Split(new char[] {'&'}, StringSplitOptions.RemoveEmptyEntries))
             {
-                var keyvalue = pair.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                var keyvalue = pair.Split(new char[] {'='}, StringSplitOptions.RemoveEmptyEntries);
                 if (keyvalue.Length == 2)
                 {
                     retval.Add(keyvalue[0], Uri.UnescapeDataString(keyvalue[1]));
@@ -286,9 +300,9 @@ namespace CefGlue.Lib.Browser
             var retval = new NameValueCollection();
 
             query = query.Trim('?');
-            foreach (var pair in query.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var pair in query.Split(new char[] {'&'}, StringSplitOptions.RemoveEmptyEntries))
             {
-                var keyvalue = pair.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                var keyvalue = pair.Split(new char[] {'='}, StringSplitOptions.RemoveEmptyEntries);
                 if (keyvalue.Length == 2)
                 {
                     retval.Add(keyvalue[0], Uri.UnescapeDataString(keyvalue[1]));
@@ -300,6 +314,48 @@ namespace CefGlue.Lib.Browser
             }
 
             return retval;
+        }
+
+        /// <summary>
+        /// GetPostData
+        /// </summary>
+        /// <param name="request">CefRequest</param>
+        /// <returns>byte[]</returns>
+        public static (byte[] rawData, string[] uploadFiles) GetPostData(CefRequest request)
+        {
+            byte[] postData = null;
+            var uploadFiles = new List<string>();
+
+            if (request.PostData != null)
+            {
+                var items = request.PostData.GetElements();
+
+                if (items != null && items.Length > 0)
+                {
+                    var bytes = new List<byte>();
+                    foreach (var item in items)
+                    {
+                        var buffer = item.GetBytes();
+
+                        //var size = (int)item.BytesCount;
+
+                        switch (item.ElementType)
+                        {
+                            case CefPostDataElementType.Bytes:
+                                bytes.AddRange(buffer);
+                                break;
+                            case CefPostDataElementType.File:
+                                uploadFiles.Add(item.GetFile());
+                                break;
+                        }
+                    }
+
+                    postData = bytes.ToArray();
+                    bytes = null;
+                }
+            }
+
+            return (postData, uploadFiles.ToArray());
         }
 
         #endregion
