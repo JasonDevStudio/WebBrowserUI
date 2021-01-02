@@ -15,5 +15,8 @@
     <ItemGroup>
       <Compile Update="MainControl.cs" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="wwwroot" />
+    </ItemGroup>
 
 </Project>

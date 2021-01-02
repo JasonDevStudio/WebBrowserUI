@@ -1,5 +1,6 @@
 ﻿namespace CefGlue.Forms.Demo
 {
+    using CefGlue.Lib.Browser;
     using System;
     using System.Drawing;
     using System.Drawing.Drawing2D;
@@ -140,7 +141,7 @@
             var host = this.WebBrowser.CefBrowser.GetHost();
             var wi = CefWindowInfo.Create();
             wi.SetAsPopup(IntPtr.Zero, "DevTools");
-            var client = new CefGlue.Lib.Browser.WebClient(this.WebBrowser);
+            var client = new DevToolsWebClient();
             host.ShowDevTools(wi, client, this.BrowserSettings, new CefPoint(0, 0));
         }
 

@@ -129,4 +129,8 @@
 
         #endregion
     }
+    
+    public class DevToolsWebClient : CefClient
+    {
+    }
 }

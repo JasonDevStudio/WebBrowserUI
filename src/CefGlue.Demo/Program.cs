@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CefGlue.Lib.Framework;
 using Xilium.CefGlue;
 
 namespace CefGlue.Forms.Demo
@@ -33,7 +34,7 @@ namespace CefGlue.Forms.Demo
                 settings.NoSandbox = true;
 
                 var mainArgs = new CefMainArgs(new string[0]);
-                //var exitCode = CefRuntime.ExecuteProcess(mainArgs, app, IntPtr.Zero);
+                var exitCode = CefRuntime.ExecuteProcess(mainArgs, new FormiumApp(), IntPtr.Zero);
                 //Console.WriteLine("CefRuntime.ExecuteProcess() returns {0}", exitCode);
                 //if (exitCode != -1)
                 //    return exitCode;
