@@ -5,9 +5,15 @@
     <title>Title</title>    
 </head>
 <body>
-<div><button id="load" onclick="load()">Load</button></div>
+<div><button id="load0" onclick="load()">Get</button>
+    <button id="load" onclick="postData()">Post</button> </div>
 <div>Hello Home !</div>
 <div id="mainBody">Hello Home !</div>
+<div><form id="mainForm" method="post" action="http://api.app.service/home/post" >
+    <p>First name: <input type="text" name="Name" id="Name"/></p>
+    <p>Last name: <input type="text" name="Addr" id="Addr"/></p>
+    <input type="submit" value="Submit" />
+</form></div>
 </body>
 <script type="application/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="js/home.js"></script>

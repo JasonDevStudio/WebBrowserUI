@@ -29,7 +29,7 @@ namespace CefGlue.Lib.Hanlers
                 methodPath = Regex.Replace(methodPath, @"\?.*", string.Empty).ToLower();
 
                 // 查找 API 路由
-                var route = AppRuntime.RunTime.Routes.FirstOrDefault(m => m.RoutePath == methodPath && m.RouteMethod.Method.ToUpper() == request.Method.Method.ToUpper());
+                var route = AppRuntime.RunTime.Routes.FirstOrDefault(m => m.RoutePath == methodPath && m.RouteMethod.Method.ToUpper() == request.Method.ToUpper());
 
                 // 执行API
                 return route?.ExecuteCore(request);

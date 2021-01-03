@@ -32,11 +32,6 @@ namespace CefGlue.Lib.Browser
         #region Fields
 
         /// <summary>
-        /// Defines the _method.
-        /// </summary>
-        private readonly string _method;
-
-        /// <summary>
         /// Defines the _jsonSerializerOptions.
         /// </summary>
         private JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
@@ -63,7 +58,7 @@ namespace CefGlue.Lib.Browser
             CefRequest cefRequest)
         {
             Uri = uri;
-            _method = method;
+            Method = method;
             Headers = headers;
             RawData = postData;
             UploadFiles = uploadFiles;
@@ -177,7 +172,7 @@ namespace CefGlue.Lib.Browser
         /// <summary>
         /// Gets the Method.
         /// </summary>
-        public HttpMethod Method { get; set; }
+        public string Method { get; set; }
 
         /// <summary>
         /// Gets the QueryString.

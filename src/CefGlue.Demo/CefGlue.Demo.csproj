@@ -6,7 +6,10 @@
         <UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-      <DefineConstants>WINDOWS</DefineConstants>
+      <DefineConstants>TRACE;DEBUG;WINDOWS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
       <None Remove="wwwroot\home.html" />
