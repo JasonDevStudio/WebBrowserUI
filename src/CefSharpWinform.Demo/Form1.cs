@@ -15,6 +15,9 @@ namespace CefSharpWinform.Demo
         public Form1()
         {
             InitializeComponent();
+
+            var browser = new CefSharp.WinForms.ChromiumWebBrowser("http://www.google.com") { Dock = DockStyle.Fill } ;
+            this.Controls.Add(browser);
         }
     }
 }
