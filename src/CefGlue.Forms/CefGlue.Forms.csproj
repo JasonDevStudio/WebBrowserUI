@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>net472;net48;</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">

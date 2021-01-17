@@ -1,4 +1,4 @@
-﻿namespace CefSharp.Winform.Demo
+﻿namespace CefSharpWinform.Demo
 {
     partial class Form1
     {

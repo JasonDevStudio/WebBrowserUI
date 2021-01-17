@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CefSharp.Winform.Demo
+namespace CefSharpWinform.Demo
 {
     static class Program
     {

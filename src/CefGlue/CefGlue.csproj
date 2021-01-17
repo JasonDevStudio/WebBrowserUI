@@ -4,11 +4,17 @@
     <LangVersion>9.0</LangVersion>
     <TargetFrameworks>net5.0;netstandard2.0;netstandard2.1</TargetFrameworks>
     <RootNamespace>CefGlue.Core</RootNamespace>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
